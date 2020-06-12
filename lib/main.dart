@@ -75,7 +75,9 @@ class MapSampleState extends State<MapSample> {
   static final CameraPosition _NH220 = CameraPosition(
       target: LatLng(25.0754409,121.5729122),
       zoom: 17);
-
+  static final CameraPosition _NH468 = CameraPosition(
+      target: LatLng(25.078472, 121.569555),
+      zoom: 17);
   BitmapDescriptor _markerIcon;
   BitmapDescriptor pinLocationIcon ;
   BitmapDescriptor lakeMarkerIcon ;
@@ -90,7 +92,7 @@ class MapSampleState extends State<MapSample> {
 
     lakeMarkerIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(devicePixelRatio: 2.5),
-        'resources/images/maker.png');
+        'resources/images/puper_icon.png');
   }
   @override
   void initState(){
@@ -128,10 +130,22 @@ class MapSampleState extends State<MapSample> {
               },
               infoWindow: InfoWindow(
                 title: "This is FET!",
+                  snippet: "NH220 大樓"
               ),
-          )
+          ),
+        Marker(
+          markerId: MarkerId("marker_nh468"),
+          position: _NH468.target,
+          icon: _markerIcon,
+          infoWindow: InfoWindow(
+              title: "This is FET!",
+              snippet: "NH468 大樓"
+          ),
+        )
       ]);
     });
+    Widget menuWidget = MenuStatefulWidget(controller:_controller);
+
     return new Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -139,28 +153,37 @@ class MapSampleState extends State<MapSample> {
         title: Text(widget.title),
       ),
       drawer: Drawer(
-          child:MenuStatefulWidget()
+          child:menuWidget
       ),
       body: Center(
         child:
         GoogleMap(
+          myLocationEnabled: true,
+          compassEnabled: true,
           mapType: MapType.normal,
           initialCameraPosition: _kGooglePlex,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
+            controller.setMapStyle(mapStyle)
           },
           markers:_markers,
           onTap: (LatLng pos){
-           // _goToTheLake();
+           if(pos!=_NH220.target)
+              _goToTheNH220();
+           else{
+             setState(() {
+
+             });
+           }
           },
         ),
       ),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheNH220,
-        label: Text('To the NH220!'),
-        icon: Icon(Icons.directions_car),
-      ),
+//      floatingActionButton: FloatingActionButton.extended(
+//        onPressed: _goToTheNH220,
+//        label: Text('To the NH220!'),
+//        icon: Icon(Icons.directions_car),
+//      ),
     );
   }
 

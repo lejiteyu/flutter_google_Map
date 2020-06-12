@@ -25,7 +25,8 @@ dependencies:
     sdk: flutter
   #Google map API//加這行
   google_maps_flutter: ^0.5.11
-
+  location: ^2.3.5
+  flutter_polyline_points: ^0.1.0
   # 国际化
   flutter_localizations:
     sdk: flutter
