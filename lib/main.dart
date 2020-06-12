@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'Object/AboutDialogLyon.dart';
 import 'menu_drawer.dart';
 
 void main() {
@@ -76,11 +77,61 @@ class MapSampleState extends State<MapSample> {
       zoom: 17);
 
   BitmapDescriptor _markerIcon;
+  BitmapDescriptor pinLocationIcon ;
+  BitmapDescriptor lakeMarkerIcon ;
+  Set <Marker> _markers = {
 
+  };
+
+  void setCustomMapPin() async {
+    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'resources/images/puper_icon.png');
+
+    lakeMarkerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'resources/images/maker.png');
+  }
+  @override
+  void initState(){
+    setCustomMapPin();
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio:2.5),
+        'resources/images/fet.jpeg').then((onValue){
+      _markerIcon = onValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    _createMarkerImageFromAsset(context);
+    setState(() {
+      _markers.addAll([
+        Marker(
+            markerId: MarkerId("marker_Google"),
+            position: _kGooglePlex.target,
+            icon: pinLocationIcon,
+            infoWindow: InfoWindow(
+              title: "This is Google!",
+            ),
+        ),
+          Marker(
+              markerId: MarkerId("marker_Lake"),
+              position: _kLake.target,
+              icon: lakeMarkerIcon
+          ),
+          Marker(
+              markerId: MarkerId("marker_nh220"),
+              position: _NH220.target,
+              icon: _markerIcon,
+              onTap: (){
+                showMyMaterialDialog(context);
+              },
+              infoWindow: InfoWindow(
+                title: "This is FET!",
+              ),
+          )
+      ]);
+    });
     return new Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -98,8 +149,9 @@ class MapSampleState extends State<MapSample> {
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
+          markers:_markers,
           onTap: (LatLng pos){
-            _goToTheLake();
+           // _goToTheLake();
           },
         ),
       ),
@@ -115,41 +167,25 @@ class MapSampleState extends State<MapSample> {
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-    _createMarker(_kLake.target);
   }
 
   Future<void> _goToTheNH220() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_NH220));
-    _createMarker(_NH220.target);
   }
 
-  Future<void> _createMarkerImageFromAsset(BuildContext context) async {
-    if (_markerIcon == null) {
-      final ImageConfiguration imageConfiguration =
-      createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(
-          imageConfiguration, 'images/maker.png')
-          .then(_updateBitmap);
-    }
-  }
-
-  void _updateBitmap(BitmapDescriptor bitmap) {
-    setState(() {
-      _markerIcon = bitmap;
-    });
-  }
-
-  Set<Marker> _createMarker(LatLng latLng) {
-    // TODO(iskakaushik): Remove this when collection literals makes it to stable.
-    // https://github.com/flutter/flutter/issues/28312
-    // ignore: prefer_collection_literals
-    return <Marker>[
-      Marker(
-        markerId: MarkerId("marker_1"),
-        position: latLng,
-        icon: _markerIcon,
-      ),
-    ].toSet();
+  void showMyMaterialDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return new AboutDialogLyon(
+            applicationName:'遠傳電信',
+            applicationVersion:'FET NH220',
+            applicationIcon:Image.asset('resources/images/fet.jpeg'),
+            children: <Widget>[
+              Text(tr('title'),style: TextStyle(fontSize: 30),)
+            ],
+          );
+        });
   }
 }
