@@ -69,3 +69,7 @@ Android:
  這樣前置作業就完成了！                        
   
   
+  
+  Permission
+  請參考：
+  https://blog.csdn.net/u013425527/article/details/98938611
