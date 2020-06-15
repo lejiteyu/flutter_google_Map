@@ -33,5 +33,8 @@
   "SGD": "新加幣",
   "TWD": "台幣",
 
-  "network_fail": "網路錯誤！"
+  "network_fail": "網路錯誤！",
+
+  "permiss_success": "權限申請通過！",
+  "permiss_fail": "權限申請未過！"
 }

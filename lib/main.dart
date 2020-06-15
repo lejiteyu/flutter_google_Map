@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:ads/ads.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'GoogleADMob/GAD.dart';
 import 'Object/AboutDialogLyon.dart';
+import 'Permission.dart';
 import 'menu_drawer.dart';
 
 void main() {
@@ -84,26 +90,60 @@ class MapSampleState extends State<MapSample> {
   Set <Marker> _markers = {
 
   };
-
+  LatLng _lastTap;
+  
   void setCustomMapPin() async {
-    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5),
-        'resources/images/puper_icon.png');
-
-    lakeMarkerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5),
-        'resources/images/puper_icon.png');
+    if (Platform.isIOS) {
+      pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/iOS/purper_icon/60.png');
+      lakeMarkerIcon = pinLocationIcon;
+      _markerIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/iOS/fet/60.png');
+    }
+    else {
+      pinLocationIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/images/puper_icon.png');
+      lakeMarkerIcon = pinLocationIcon;
+      _markerIcon = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/images/fet.png');
+    }
+   
   }
   @override
   void initState(){
-    setCustomMapPin();
-    BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio:2.5),
-        'resources/images/fet.jpeg').then((onValue){
-      _markerIcon = onValue;
-    });
+    GAD(initOption:3);
+    getPermission();
+    if (Platform.isIOS) {
+      BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 1.5),
+          'resources/images/purple2.png').then((onValue) {
+        pinLocationIcon = onValue;
+      });
+      BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 1.5),
+          'resources/images/fet.png').then((onValue) {
+        _markerIcon = onValue;
+      });
+    }else{
+      BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/images/puper_icon.png').then((onValue) {
+        pinLocationIcon = onValue;
+      });
+      BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'resources/images/fet.jpeg').then((onValue) {
+        _markerIcon = onValue;
+      });
+    }
+    
   }
-
+  
+  
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -164,26 +204,22 @@ class MapSampleState extends State<MapSample> {
           initialCameraPosition: _kGooglePlex,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
-            controller.setMapStyle(mapStyle)
           },
           markers:_markers,
           onTap: (LatLng pos){
-           if(pos!=_NH220.target)
-              _goToTheNH220();
-           else{
              setState(() {
-
+               _lastTap = pos;
+               _markers.add(
+                   Marker(
+                     markerId: MarkerId("marker_touch"),
+                     position: _lastTap,
+                   )
+               );
              });
-           }
+           
           },
         ),
       ),
-
-//      floatingActionButton: FloatingActionButton.extended(
-//        onPressed: _goToTheNH220,
-//        label: Text('To the NH220!'),
-//        icon: Icon(Icons.directions_car),
-//      ),
     );
   }
 
@@ -211,4 +247,21 @@ class MapSampleState extends State<MapSample> {
           );
         });
   }
+
+
+  Future<void> getPermission()async {
+    Permission().requestPermission(context).then((value) => (){
+      if(value){
+        Permission().getLocation().then((value) =>()
+        {
+          print('my location:$value');
+        });
+      }else{
+
+      }
+    });
+  }
+
+  
+ 
 }

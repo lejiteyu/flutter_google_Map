@@ -8,12 +8,27 @@
 <!--    Google Map 需要手動增加下面兩個 uses-permission-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
+    <uses-permission android:name=
+        "android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name=
+        "android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Lyon Map"
         android:icon="@mipmap/ic_launcher">
+<!--        Google Map API Key-->
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAkmD0SPtwk-HBPx3M7epd0fp9kVlGe21s"/>
+
+<!--        Google  ADS ADMob Id  note:this is test id-->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

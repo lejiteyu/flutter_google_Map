@@ -7,11 +7,17 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:package_info/package_info.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:toast/toast.dart';
 
+import 'GoogleADMob/GAD.dart';
 import 'Object/AboutDialogLyon.dart';
+
+import 'Permission.dart';
 import 'main.dart';
 
 String _appVersion = '0.0.0';
@@ -86,7 +92,23 @@ class _ParentWidgetState extends State<MenuStatefulWidget> {
             Navigator.pop(context);
           },
         ),
+        ListTile(
+          leading: Icon(Icons.pie_chart),
+          title: Text('Google ADS'),
+          onTap: () {
+            Navigator.of(context).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => GADPage()));
+          },
+        ),
         new Divider(),    //分割线控件
+        ListTile(
+          leading: Icon(Icons.place),
+          title: Text('Google'),
+          onTap: () {
+            Navigator.of(context).pop();
+            _goTo(_kGooglePlex,"marker_google");
+          },
+        ),
         ListTile(
           leading: Icon(Icons.place),
           title: Text('NH220'),
@@ -97,7 +119,7 @@ class _ParentWidgetState extends State<MenuStatefulWidget> {
         ),
         ListTile(
           leading: Icon(Icons.place),
-          title: Text('NH4689'),
+          title: Text('NH468'),
           onTap: () {
             Navigator.of(context).pop();
             _goTo(_NH468,"marker_nh468");
@@ -107,12 +129,18 @@ class _ParentWidgetState extends State<MenuStatefulWidget> {
     );
   }
 
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   static final CameraPosition _NH220 = CameraPosition(
       target: LatLng(25.0754409,121.5729122),
       zoom: 17);
   static final CameraPosition _NH468 = CameraPosition(
       target: LatLng(25.078472, 121.569555),
       zoom: 17);
+
+
 
   Future<void> _goTo(CameraPosition pos,String markerId) async {
     final GoogleMapController c = await controller.future;
@@ -144,12 +172,6 @@ class _ParentWidgetState extends State<MenuStatefulWidget> {
       _appVersion = 'ver:$localVersion($buildNumber)';
     });
   }
-
-
-  Future setGoToNH220() async{
-
-  }
-
 
 
 

@@ -25,8 +25,16 @@ dependencies:
     sdk: flutter
   #Google map API//加這行
   google_maps_flutter: ^0.5.11
-  location: ^2.3.5
-  flutter_polyline_points: ^0.1.0
+#  location: ^2.3.5
+#  flutter_polyline_points: ^0.1.0
+  #Gps 位置
+  geolocator: ^3.0.1
+
+  #动态权限申请
+  permission_handler: '^3.2.0'
+  #toast
+  toast: ^0.1.3
+
   # 国际化
   flutter_localizations:
     sdk: flutter
@@ -43,6 +51,10 @@ dependencies:
   launch_review: ^1.0.1
   #packageinfo详情获取 在android和ios原生(ios必须打包)中能发现version变化
   package_info: ^0.3.2+1
+  #20200615 Google ADS
+  firebase_admob: ^0.9.0+1
+  ads: ^1.7.3
+
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +78,7 @@ flutter:
   assets:
     - resources/images/
     - resources/langs/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
