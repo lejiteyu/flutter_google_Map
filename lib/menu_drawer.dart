@@ -18,6 +18,7 @@ import 'GoogleADMob/GAD.dart';
 import 'Object/AboutDialogLyon.dart';
 
 import 'Permission.dart';
+import 'Reservoir/NorthReservoir.dart';
 import 'main.dart';
 
 String _appVersion = '0.0.0';
@@ -100,31 +101,7 @@ class _ParentWidgetState extends State<MenuStatefulWidget> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => GADPage()));
           },
         ),
-        new Divider(),    //分割线控件
-        ListTile(
-          leading: Icon(Icons.place),
-          title: Text('Google'),
-          onTap: () {
-            Navigator.of(context).pop();
-            _goTo(_kGooglePlex,"marker_google");
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.place),
-          title: Text('NH220'),
-          onTap: () {
-            Navigator.of(context).pop();
-            _goTo(_NH220,"marker_nh220");
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.place),
-          title: Text('NH468'),
-          onTap: () {
-            Navigator.of(context).pop();
-            _goTo(_NH468,"marker_nh468");
-          },
-        ),
+        new NorthReservoir(GoTo:_goTo),
       ],
     );
   }
