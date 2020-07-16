@@ -169,7 +169,8 @@ Android:
     <!--20200615 Google ADS Google ADSMob 加入上面兩行 end-->
     
    去https://console.firebase.google.com/u/0/ 建立專案 下載 GoogleService-Info.plist
-   使用XCode 將GoogleService-Info.plist 放入到Runner資料夾
+   使用XCode 將GoogleService-Info.plist 放入到Runner資料夾，
+   否則會因為找不到GoogleService-Info.plist導致fire_base connect fail 無法開啟app
    
       GoogleService-Info.plist
       
